@@ -17,7 +17,7 @@ open class RefreshHeader: UIView {
     
     /// RefreshHeader 应该直接被添加在 UIScrollView 上
     private var scrollView: UIScrollView? { superview as? UIScrollView }
-    private var topConstraint: NSLayoutConstraint?
+    private var constraint: NSLayoutConstraint?
     private var cancellables = Set<AnyCancellable>()
     private var originalTopInset: CGFloat = 0
     private var dragEndContinuation: CheckedContinuation<Void, Never>?
@@ -70,7 +70,7 @@ open class RefreshHeader: UIView {
         
         feedback.prepare()
         translatesAutoresizingMaskIntoConstraints = false
-        topConstraint = bottomAnchor.constraint(
+        constraint = bottomAnchor.constraint(
             equalTo: scrollView.topAnchor,
             constant: -scrollView.contentInset.top
         )
@@ -79,7 +79,7 @@ open class RefreshHeader: UIView {
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            topConstraint!,
+            constraint!,
             heightConstraint
         ])
         
@@ -90,7 +90,7 @@ open class RefreshHeader: UIView {
             .removeDuplicates()
             .sink { [weak self] contentInset in
                 guard let self, refreshState == .idle else { return }
-                topConstraint?.constant = -contentInset.top
+                constraint?.constant = -contentInset.top
             }
             .store(in: &cancellables)
     }

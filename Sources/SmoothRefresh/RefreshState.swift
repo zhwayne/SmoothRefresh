@@ -19,4 +19,6 @@ public enum RefreshState {
     case refreshing
     /// 刷新完毕，即将重新回到初始状态
     case completed
+    /// 没有其他数据
+    case noMoreData
 }
